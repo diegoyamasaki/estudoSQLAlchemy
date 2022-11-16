@@ -8,7 +8,7 @@ from models.model_base import ModelBase
 from models.sabor import Sabor
 from models.tipo_embalagem import TipoEmbalagem
 from models.tipo_picole import TipoPicole
-from models.ingridiente import Ingrediente
+from models.ingrediente import Ingrediente
 from models.conservante import Conservante
 from models.aditivo_nutritivo import AditivoNutritivo
 
@@ -17,7 +17,7 @@ ingredientes_picole = sa.Table(
     'ingredientes_picole',
     ModelBase.metadata,
     sa.Column('id_picole', sa.Integer, sa.ForeignKey('picoles.id')),
-    sa.Column('id_ingrediente', sa.Integer, sa.ForeignKey('ingrendientes.id'))
+    sa.Column('id_ingrediente', sa.Integer, sa.ForeignKey('ingredientes.id'))
 )
 
 
