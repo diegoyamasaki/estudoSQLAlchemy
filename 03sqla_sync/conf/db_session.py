@@ -12,6 +12,7 @@ from models.model_base import ModelBase
 
 __engine: Optional[Engine] = None
 
+
 def create_engine(sqlite: bool = False):
     global __engine
 

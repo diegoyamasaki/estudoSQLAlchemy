@@ -41,7 +41,7 @@ aditivos_nutritivos_picole = sa.Table(
 class Picole(ModelBase):
     __tablename__ : str = 'picoles'
 
-    id: int = sa.Column(sa.BigInteger, primary_key=True, autoincrement=True)
+    id: int = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     data_criacao: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
 
     preco: float = sa.Column(sa.DECIMAL(8, 2), nullable=False)
