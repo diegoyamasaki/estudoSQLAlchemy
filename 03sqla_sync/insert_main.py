@@ -5,6 +5,7 @@ from models.tipo_embalagem import TipoEmbalagem
 from models.tipo_picole import TipoPicole
 from models.ingrediente import Ingrediente
 from models.conservante import Conservante
+from models.revendedor import Revendedor
 
 def insert_aditivo_nutritivo() -> None:
     print('Cadastrando Aditivo Nutritivo')
@@ -75,10 +76,28 @@ def insert_conservante() -> None:
         session.commit()
     print('Conservante cadastrado com sucesso.')
 
+def insert_revendedor() -> Revendedor:
+    print('Cadastro do revendedor')
+    cnpj: str = input('Informe o cnpj do revendedor')
+    razao_social: str = input('Informe a razão socila')
+    contato: str = input('Informe o contato')
+
+    revendedor: Revendedor = Revendedor(cnpj=cnpj, razao_social=razao_social, contato=contato)
+
+    with create_session() as session:
+        session.add(revendedor)
+        session.commit()
+    
+    print('Revendedor cadastrado com sucesso.')
+    return revendedor
+
+
 if __name__ == '__main__':
     # insert_aditivo_nutritivo()
     # insert_sabor()
     # insert_tipos_embalagem()
     # insert_tipo_picole()
     # insert_ingrediente()
-    insert_conservante()
+    # insert_conservante()
+    rev = insert_revendedor()
+    print(f'ID revendedor {rev.id}')
