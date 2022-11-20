@@ -126,13 +126,13 @@ def populate_picoles(session: Session) -> None:
         return ingrediente
 
     def generate_conservante():
-        nome: str = f'{__fake.unique.last_name().lower()} {__fake.unique.first_name().lower()}'
+        nome: str = f'{__fake.unique.last_name().lower()} {randint(0,100000)}'
         descricao: str = __fake.unique.last_name().lower()
         conservante: Conservante = Conservante(nome=nome, descricao=descricao)
         return conservante
     
     def generate_aditivo_nutritivo():
-        nome: str = f"{__fake.unique.color()} {__fake.unique.last_name().lower()}"
+        nome: str = f"{__fake.unique.color()} {randint(0,100000)}"
         __fake.unique.clear()
         formula_quimica = __fake.unique.color()
         __fake.unique.clear()
@@ -167,6 +167,7 @@ def populate():
         populate_notas_fiscais(session)
         populate_picoles(session)
         session.commit()
+        print('Finalizado com sucesso.')
 
 if __name__ == '__main__':
     create_tables()
