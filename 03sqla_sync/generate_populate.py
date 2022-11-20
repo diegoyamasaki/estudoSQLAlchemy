@@ -1,7 +1,7 @@
 
 from tqdm import tqdm
 from faker import Faker
-from random import random, randint
+from random import random, randint, uniform
 from conf.db_session import create_session, create_tables
 from sqlalchemy.orm import Session
 from models.aditivo_nutritivo import AditivoNutritivo
@@ -99,6 +99,60 @@ def populate_lote(session: Session) -> None:
         lote: Lote = Lote(id_tipo_picole=id_tipo_picole, quantidade=quantidade)
         session.add(lote)
 
+def populate_notas_fiscais(session: Session) -> None:
+    __fake = Faker('pt_BR')
+    __fake.unique.clear()
+    __fake.seed_instance(random())
+    for i in tqdm(range(100), colour='#70FF00'):
+        valor: float = uniform(100.0, 10000.0)
+        numero_serie: int = i
+        descricao: str = __fake.unique.paragraph(nb_sentences=2)
+        nf: NotaFiscal = NotaFiscal(
+            valor=valor,
+            numero_serie=numero_serie,
+            descricao=descricao,
+            id_revendedor=i
+            )
+        session.add(nf)
+
+def populate_picoles(session: Session) -> None:
+    __fake = Faker('pt_BR')
+    __fake.unique.clear()
+    __fake.seed_instance(random())
+
+    def generate_ingredientes():
+        nome: str = f'{__fake.unique.first_name().lower()} {randint(0,100000)}'
+        ingrediente: Ingrediente = Ingrediente(nome=nome)
+        return ingrediente
+
+    def generate_conservante():
+        nome: str = f'{__fake.unique.last_name().lower()} {__fake.unique.first_name().lower()}'
+        descricao: str = __fake.unique.last_name().lower()
+        conservante: Conservante = Conservante(nome=nome, descricao=descricao)
+        return conservante
+    
+    def generate_aditivo_nutritivo():
+        nome: str = f"{__fake.unique.color()} {__fake.unique.last_name().lower()}"
+        __fake.unique.clear()
+        formula_quimica = __fake.unique.color()
+        __fake.unique.clear()
+        an = AditivoNutritivo(nome=nome, formula_quimica=formula_quimica)
+        return an
+        
+    for i in tqdm(range(100), colour='#B1B8B7'):
+        preco: float = uniform(1.0, 10.0)
+        picole: Picole = Picole(
+            preco=preco,
+            id_sabor=i,
+            id_tipo_picole=i,
+            id_tipo_embalagem=i
+            )
+        picole.ingredientes.append(generate_ingredientes())
+        picole.ingredientes.append(generate_ingredientes())
+        picole.conservantes.append(generate_conservante())
+        picole.aditivos_nutritivos.append(generate_aditivo_nutritivo())
+        session.add(picole)
+
 def populate():
     with create_session() as session:
         print('Init proccess...')
@@ -110,6 +164,8 @@ def populate():
         populate_conservantes(session)
         populate_revendedor(session)
         populate_lote(session)
+        populate_notas_fiscais(session)
+        populate_picoles(session)
         session.commit()
 
 if __name__ == '__main__':
