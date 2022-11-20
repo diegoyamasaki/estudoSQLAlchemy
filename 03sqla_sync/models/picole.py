@@ -50,7 +50,7 @@ class Picole(ModelBase):
     sabor: Sabor = orm.relationship('Sabor', lazy='joined')
 
     id_tipo_embalagem: int = sa.Column(sa.Integer, sa.ForeignKey('tipos_embalagem.id'))
-    sabor: TipoEmbalagem = orm.relationship('TipoEmbalagem', lazy='joined')
+    tipo_embalagem: TipoEmbalagem = orm.relationship('TipoEmbalagem', lazy='joined')
 
     id_tipo_picole: int = sa.Column(sa.Integer, sa.ForeignKey('tipos_picole.id'))
     sabor: TipoPicole = orm.relationship('TipoPicole', lazy='joined')
