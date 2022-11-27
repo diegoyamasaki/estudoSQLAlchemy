@@ -10,6 +10,7 @@ from sqlalchemy.future.engine import Engine
 
 from models.model_base import ModelBase
 
+
 __engine: Optional[Engine] = None
 
 
@@ -53,6 +54,3 @@ def create_tables() -> None:
     import models.__all__models
     ModelBase.metadata.drop_all(__engine)
     ModelBase.metadata.create_all(__engine)
-    
-    
-
