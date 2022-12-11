@@ -64,8 +64,54 @@ def select_order_by_sabor() -> None:
             print(f'Npme: {sabor.nome}')
 
 
+def select_group_by_picole() -> None:
+    with create_session() as session:
+        picoles: List[Picole] = session.query(Picole).group_by(Picole.id, Picole.id_tipo_picole).all()
+
+        for picole in picoles:
+            print(f'ID: {picole.id}')
+            print(f'Tipo Picole: {picole.tipo_picole.nome}')
+            print(f'Sabor: {picole.sabor.nome}')
+            print(f'ID: {picole.preco}')
+
+def select_limit() -> None:
+    with create_session() as session:
+        sabores: List[Sabor] = session.query(Sabor).limit(25)
+
+        for sabor in sabores:
+            print(f'ID: {sabor.id}')
+            print(f'None: {sabor.nome}')
+
+
+def select_count_revendedor() -> None:
+    with create_session() as session:
+        quantidade: int = session.query(Revendedor).count()
+
+        print(f'Quantidade de revendedores = {quantidade}')
+
+
+def select_agregacao() -> None:
+    with create_session() as session:
+        resultado: List = session.query(
+            func.sum(Picole.preco).label('soma'),
+            func.avg(Picole.preco).label('media'),
+            func.min(Picole.preco).label('minimo'),
+            func.max(Picole.preco).label('maximo'),
+        ).all()
+
+        print(resultado)
+
+        print(f'Soma {resultado[0][0]}')
+        print(f'Media {resultado[0][1]}')
+        print(f'Minimo {resultado[0][2]}')
+        print(f'Maximo {resultado[0][3]}')
+
 if __name__ == '__main__':
     # select_todos_aditivos_nutritivos()
     # select_filtro_sabor(99999)
     # select_complexo_picole()
-    select_order_by_sabor()
+    # select_order_by_sabor()
+    # select_order_by_sabor()
+    # select_limit()
+    # select_count_revendedor()
+    select_agregacao()
