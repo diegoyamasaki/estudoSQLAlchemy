@@ -41,6 +41,7 @@ def create_session() -> Session:
     __session = sessionmaker(__engine, expire_on_commit=False, class_=Session)
 
     session: Session = __session()
+    session.execute("PRAGMA foreign_keys = ON") # Usando somente para sqlite pois ele desabilita chave estrangeira.
 
     return session
 
