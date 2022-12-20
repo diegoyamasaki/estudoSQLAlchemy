@@ -1,3 +1,4 @@
+import asyncio
 
 from tqdm import tqdm
 from faker import Faker
@@ -103,6 +104,12 @@ def populate_notas_fiscais(session: Session) -> None:
     __fake = Faker('pt_BR')
     __fake.unique.clear()
     __fake.seed_instance(random())
+    def generate_lote(lote_id):
+        id_tipo_picole: int = i + 1
+        quantidade: int = randint(1, 9999)
+        lote: Lote = Lote(id_tipo_picole=id_tipo_picole, quantidade=quantidade)
+        return lote
+
     for i in tqdm(range(100), colour='#70FF00'):
         valor: float = uniform(100.0, 10000.0)
         numero_serie: int = i
@@ -113,6 +120,7 @@ def populate_notas_fiscais(session: Session) -> None:
             descricao=descricao,
             id_revendedor=i
             )
+        nf.lotes.append(generate_lote(i))
         session.add(nf)
 
 def populate_picoles(session: Session) -> None:
@@ -153,8 +161,8 @@ def populate_picoles(session: Session) -> None:
         picole.aditivos_nutritivos.append(generate_aditivo_nutritivo())
         session.add(picole)
 
-def populate():
-    with create_session() as session:
+async def populate():
+    async with create_session() as session:
         print('Init proccess...')
         populate_aditivo_nutritivo(session)
         populate_sabor(session)
@@ -163,12 +171,12 @@ def populate():
         populate_ingredientes(session)
         populate_conservantes(session)
         populate_revendedor(session)
-        populate_lote(session)
+        # populate_lote(session)
         populate_notas_fiscais(session)
         populate_picoles(session)
-        session.commit()
+        await session.commit()
         print('Finalizado com sucesso.')
 
 if __name__ == '__main__':
-    create_tables()
-    populate()
+    asyncio.run(create_tables()) 
+    asyncio.run(populate()) 
