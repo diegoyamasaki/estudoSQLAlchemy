@@ -156,7 +156,7 @@ def populate_picoles(session: Session) -> None:
             id_tipo_embalagem=i
             )
         picole.ingredientes.append(generate_ingredientes())
-        picole.ingredientes.append(generate_ingredientes())
+        # picole.ingredientes.append(generate_ingredientes())
         picole.conservantes.append(generate_conservante())
         picole.aditivos_nutritivos.append(generate_aditivo_nutritivo())
         session.add(picole)
@@ -164,17 +164,18 @@ def populate_picoles(session: Session) -> None:
 async def populate():
     async with create_session() as session:
         print('Init proccess...')
-        populate_aditivo_nutritivo(session)
+        # populate_aditivo_nutritivo(session)
         populate_sabor(session)
         populate_tipos_embalagem(session)
         populate_tipo_picole(session)
-        populate_ingredientes(session)
-        populate_conservantes(session)
+        # populate_ingredientes(session)
+        # populate_conservantes(session)
         populate_revendedor(session)
         # populate_lote(session)
         populate_notas_fiscais(session)
         populate_picoles(session)
         await session.commit()
+        await session.close()
         print('Finalizado com sucesso.')
 
 if __name__ == '__main__':
